@@ -1,0 +1,8 @@
+
+apiTitle: Decode PolicyStore
+splitSpec: true
+codeSamples: true
+swaggerUI: false
+travis: true
+repo: DECODEproject/iot-policystore-docs
+oasVersion: 3.0.0
