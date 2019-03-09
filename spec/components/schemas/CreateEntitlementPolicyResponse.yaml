@@ -1,0 +1,7 @@
+description: Details of the newly created community entitlement policy
+type: object
+properties:
+  community_id:
+    $ref: '#/components/schemas/CommunityId'
+  token:
+    $ref: '#/components/schemas/Token'

@@ -1,0 +1,14 @@
+description: An operation to apply to a sensor variable
+type: object
+properties:
+  sensor_id:
+    $ref: '#/components/schemas/SensorId'
+  action:
+    $ref: '#/components/schemas/Action'
+  bins:
+    $ref: '#/components/schemas/Bins'
+  interval:
+    $ref: '#/components/schemas/Interval'
+required:
+  - sensor_id
+  - action

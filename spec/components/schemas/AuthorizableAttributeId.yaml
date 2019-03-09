@@ -1,0 +1,5 @@
+description: >-
+  Unique identifier of an authorizable attribute registered with the credential
+  issuer
+type: string
+example: ab8b4837-d593-469e-9233-c34f719b7212

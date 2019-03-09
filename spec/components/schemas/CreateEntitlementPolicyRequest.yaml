@@ -1,0 +1,18 @@
+description: Request object that must be sent to create a new community entitlement policy
+type: object
+properties:
+  label:
+    $ref: '#/components/schemas/Label'
+  operations:
+    description: An array of operations we define for the policy
+    type: array
+    items:
+      $ref: '#/components/schemas/Operation'
+  authorizable_attribute_id:
+    $ref: '#/components/schemas/AuthorizableAttributeId'
+  credential_issuer_endpoint_url:
+    $ref: '#/components/schemas/CredentialIssuerEndpointUrl'
+required:
+  - label
+  - authorizable_attribute_id
+  - credential_issuer_endpoint_url

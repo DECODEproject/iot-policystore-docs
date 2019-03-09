@@ -1,0 +1,26 @@
+post:
+  tags:
+    - Create Policy
+  summary: Create a community policy
+  description: >
+    This endpoint is the method by which a community administrator should be
+    able to create a new policy which defines a specific community. In order to
+    call this endpoint the admin will have to have previously interacted with
+    the Credential Issuing service in order to create an `Authorizable
+    Attribute` for the community.
+
+
+    For more details on this please see the documentation of the Coconut
+    protocol and the credential issuing service.
+  responses:
+    '200':
+      description: Succesful community policy creation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateEntitlementPolicyResponse'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/CreateEntitlementPolicyRequest'

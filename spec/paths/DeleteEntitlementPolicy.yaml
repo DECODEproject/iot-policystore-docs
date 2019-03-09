@@ -1,0 +1,20 @@
+post:
+  tags:
+    - Delete Policy
+  summary: Delete a community policy
+  description: |
+    This description is on the whole last thing behind the.
+
+    Another paragraph
+  responses:
+    '200':
+      description: Successful community policy deletion
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteEntitlementPolicyResponse'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/DeleteEntitlementPolicyRequest'

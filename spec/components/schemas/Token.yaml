@@ -1,0 +1,5 @@
+description: >-
+  A randomly generated string that should be stored securely by the caller and
+  is required to delete the policy
+type: string
+example: 54IOhXKOzBWOwe1r8lYyyhP2qYN+1OvjaxditFTopjU=
