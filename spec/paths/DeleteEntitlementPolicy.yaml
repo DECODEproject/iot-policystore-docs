@@ -1,0 +1,43 @@
+post:
+  tags:
+    - Delete Policy
+  summary: Delete a community policy
+  description: >
+    This endpoint allows a caller to delete a previously created community
+    entitlement policy. To be permitted to delete the policy the caller must be
+    in possesion of the community_id and token returned when creating the
+    policy.
+  responses:
+    '200':
+      description: Successful community policy deletion
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteEntitlementPolicyResponse'
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: not_found
+            msg: policy not found
+            meta:
+              cause: 'sql.ErrNoRows: record not found'
+    5XX:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: internal
+            msg: database is unavailable
+            meta:
+              cause: '*pg.Error: unable to connect to the database'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/DeleteEntitlementPolicyRequest'

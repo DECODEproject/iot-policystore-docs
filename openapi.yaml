@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  version: 0.2.0
+  title: DECODE Iot Pilot Policystore
+  contact:
+    email: info@thingful.net
+  license:
+    name: GNU Affero General Public License
+    url: 'https://www.gnu.org/licenses/agpl-3.0'
+  x-logo:
+    url: 'https://decodeproject.eu/sites/default/files/favicon_13.png'
+  description: |
+    This is documentation for the policy or community store component developed for the [DECODE](https://decodeproject.eu) IoT pilot in Barcelona.
+
+    # Introduction
+
+    The purpose of this component is to store configuration of policies describing how data may be processed and transformed for participants who are members of specific communities.
+
+    In addition to providing this storage layer, this component also plays a role in creating credentials allowing participants to obtain Coconut credentials that allow participants to prove their membership of various groups without revealing any data about themselves.
+
+    # Server Framework
+
+    The server implementation was created using a tool called [Twirp](https://twitchtv.github.io/twirp) which uses [Protocol Buffers](https://developers.google.com/protoco-buffers/) in order to specify an RPC style interface. The library allows for the auto generating of clients that use protocol buffers to transmit and receive data, but in addition the library automatically generates a vanilla JSON/HTTP interface. It is this interface that this documentation is describing.
+
+    Note that the structure of this API is a JSON / RPC style interface as opposed to a RESTful style API. This means all requests sent to the backend must be POST requests rather than adhering to the HTTP verb semantics.
+
+    # Authentication
+
+    Currently the server does not require any authentication so any caller can create, delete or view the lists of registered community entitlement policies. To delete a policy however the caller will need to have its unique identifier and the secret token returned to the caller when they registered the policy.
+
+    # Cross-Origin Resource Sharing (CORS)
+
+    This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with W3C spec. And that allows cross-domain communication from the browser. All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
+externalDocs:
+  description: Documentation repository
+  url: 'https://github.com/DECODEproject/iot-policystore-docs'
+tags:
+  - name: Create Policy
+    description: Endpoint that allows callers to create new community entitlement policies.
+  - name: Delete Policy
+    description: Endpoint that allows callers to delete previously created community entitlement policies.
+  - name: List Policies
+    description: Endpoint that allows callers to obtain lists of registered community entitlement policies.
+servers:
+  - url: 'https://policystore.decode.smartcitizen.me/twirp/decode.iot.policystore.PolicyStore/'
+    description: Instance of the policy store deployed and operated by SmartCitizen
+paths:
+  /CreateEntitlementPolicy:
+    post:
+      tags:
+        - Create Policy
+      summary: Create a community policy
+      description: |
+        This endpoint is the method by which a community administrator should be able to create a new policy which defines a specific community. In order to call this endpoint the admin will have to have previously interacted with the Credential Issuing service in order to create an `Authorizable Attribute` for the community.
+
+        For more details on this please see the documentation of the Coconut protocol and the credential issuing service.
+      responses:
+        '200':
+          description: Succesful community policy creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEntitlementPolicyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: bad_request
+                msg: authorizable_attribute_id is required
+                meta:
+                  argument: authorizable_attribute_id
+        5XX:
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: internal
+                msg: database is unavailable
+                meta:
+                  cause: '*pg.Error: unable to connect to the database'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEntitlementPolicyRequest'
+  /DeleteEntitlementPolicy:
+    post:
+      tags:
+        - Delete Policy
+      summary: Delete a community policy
+      description: |
+        This endpoint allows a caller to delete a previously created community entitlement policy. To be permitted to delete the policy the caller must be in possesion of the community_id and token returned when creating the policy.
+      responses:
+        '200':
+          description: Successful community policy deletion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteEntitlementPolicyResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: not_found
+                msg: policy not found
+                meta:
+                  cause: 'sql.ErrNoRows: record not found'
+        5XX:
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: internal
+                msg: database is unavailable
+                meta:
+                  cause: '*pg.Error: unable to connect to the database'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteEntitlementPolicyRequest'
+  /ListEntitlementPolicies:
+    post:
+      tags:
+        - List Policies
+      summary: List available community policies
+      description: |
+        This endpoint allows the caller to obtain a list of all registed community policies that are available for end users to apply to their devices. The endpoint returns a list of all policies with no pagination or searching as for the purposes of the pilot we do not expect to have a significant number of registered policies.
+      responses:
+        '200':
+          description: Successful list response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEntitlementPoliciesResponse'
+        5XX:
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: internal
+                msg: database is unavailable
+                meta:
+                  cause: '*pg.Error: unable to connect to the database'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListEntitlementPoliciesRequest'
+components:
+  schemas:
+    Action:
+      description: Label describing the type of processing to perform for this operation
+      type: string
+      enum:
+        - SHARE
+        - BIN
+        - MOVING_AVG
+    AuthorizableAttributeId:
+      description: Unique identifier of an authorizable attribute registered with the credential issuer
+      type: string
+      example: ab8b4837-d593-469e-9233-c34f719b7212
+    Bins:
+      description: An array containing a list of float values that define a set of bins into which values should be classified. Each elemnet in the list is the upper inclusive boundary of a bin. The values must be sorted in strictly increasing order. It is an error to include this parameter unless the action is `BIN`.
+      type: array
+      items:
+        type: number
+        format: float
+      example:
+        - 30
+        - 60
+        - 90
+    CommunityId:
+      description: A unique identifier of a community policy document
+      type: string
+      example: B8nxLkhz
+    CreateEntitlementPolicyRequest:
+      description: Request object that must be sent to create a new community entitlement policy
+      type: object
+      properties:
+        label:
+          $ref: '#/components/schemas/Label'
+        operations:
+          description: An array of operations we define for the policy
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+        authorizable_attribute_id:
+          $ref: '#/components/schemas/AuthorizableAttributeId'
+        credential_issuer_endpoint_url:
+          $ref: '#/components/schemas/CredentialIssuerEndpointUrl'
+      required:
+        - label
+        - authorizable_attribute_id
+        - credential_issuer_endpoint_url
+    CreateEntitlementPolicyResponse:
+      description: Details of the newly created community entitlement policy
+      type: object
+      properties:
+        community_id:
+          $ref: '#/components/schemas/CommunityId'
+        token:
+          $ref: '#/components/schemas/Token'
+    CredentialIssuerEndpointUrl:
+      description: The URL of the running credential issuer at which the authorizable attribute has been registered
+      type: string
+      example: 'https://credential.decodeproject.eu'
+    DeleteEntitlementPolicyRequest:
+      description: Request object that must be sent to delete a community entitlement policy
+      type: object
+      properties:
+        community_id:
+          $ref: '#/components/schemas/CommunityId'
+        token:
+          $ref: '#/components/schemas/Token'
+      required:
+        - community_id
+        - token
+    DeleteEntitlementPolicyResponse:
+      description: Empty response on success
+      type: object
+    Error:
+      description: Error message returned by the API
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        msg:
+          type: string
+          description: Short message describing the error
+        meta:
+          type: object
+          description: |
+            Object containing key/value pairs of metadata describing the error in more detail
+    ErrorCode:
+      type: string
+      description: String indicating the type of the error
+      enum:
+        - internal
+        - bad_request
+        - unknown
+        - invalid_argument
+        - not_found
+        - unavailable
+    Interval:
+      description: The interval in seconds over which the moving average should be calculated. It is an error to include this value unless the action for the operation is `MOVING_AVG`
+      type: integer
+      example: 900
+    Label:
+      description: Human friendly label containing the title of the community
+      type: string
+      example: Placa del Sol Residents
+    ListEntitlementPoliciesRequest:
+      description: Currently empty request sent to obtain a list of policies.
+      type: object
+    ListEntitlementPoliciesResponse:
+      description: Response object containing a list of community policies that are available for users to apply to their devices
+      type: object
+      properties:
+        policies:
+          description: A list of community policies
+          type: array
+          items:
+            $ref: '#/components/schemas/Policy'
+    Operation:
+      description: An operation to apply to a sensor variable
+      type: object
+      properties:
+        sensor_id:
+          $ref: '#/components/schemas/SensorId'
+        action:
+          $ref: '#/components/schemas/Action'
+        bins:
+          $ref: '#/components/schemas/Bins'
+        interval:
+          $ref: '#/components/schemas/Interval'
+      required:
+        - sensor_id
+        - action
+    Policy:
+      description: The definition of a community entitlement policy for presentation to an end user.
+      type: object
+      properties:
+        community_id:
+          $ref: '#/components/schemas/CommunityId'
+        label:
+          $ref: '#/components/schemas/Label'
+        operations:
+          description: An array of operations defined for the policy
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+        public_key:
+          $ref: '#/components/schemas/PublicKey'
+        authorizable_attribute_id:
+          $ref: '#/components/schemas/AuthorizableAttributeId'
+        credential_issuer_endpoint_url:
+          $ref: '#/components/schemas/CredentialIssuerEndpointUrl'
+    PublicKey:
+      description: The public key part of a key pair associated with the community. Used for encryption of data as it is retrieved.
+      type: string
+      example: foo
+    SensorId:
+      description: Numerical ID of a sensor as defined by SmartCitizen
+      type: integer
+      example: 55
+    Token:
+      description: A randomly generated string that should be stored securely by the caller and is required to delete the policy
+      type: string
+      example: 54IOhXKOzBWOwe1r8lYyyhP2qYN+1OvjaxditFTopjU=
+  headers:
+    ExpiresAfter:
+      description: date in UTC when token expires
+      schema:
+        type: string
+        format: date-time

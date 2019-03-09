@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  version: 0.2.0
+  title: DECODE Iot Pilot Policystore
+  contact:
+    email: info@thingful.net
+  license:
+    name: GNU Affero General Public License
+    url: 'https://www.gnu.org/licenses/agpl-3.0'
+  x-logo:
+    url: 'https://decodeproject.eu/sites/default/files/favicon_13.png'
+  description: >
+    This is documentation for the policy or community store component developed
+    for the [DECODE](https://decodeproject.eu) IoT pilot in Barcelona.
+
+
+    # Introduction
+
+
+    The purpose of this component is to store configuration of policies
+    describing how data may be processed and transformed for participants who
+    are members of specific communities.
+
+
+    In addition to providing this storage layer, this component also plays a
+    role in creating credentials allowing participants to obtain Coconut
+    credentials that allow participants to prove their membership of various
+    groups without revealing any data about themselves.
+
+
+    # Server Framework
+
+
+    The server implementation was created using a tool called
+    [Twirp](https://twitchtv.github.io/twirp) which uses [Protocol
+    Buffers](https://developers.google.com/protoco-buffers/) in order to specify
+    an RPC style interface. The library allows for the auto generating of
+    clients that use protocol buffers to transmit and receive data, but in
+    addition the library automatically generates a vanilla JSON/HTTP interface.
+    It is this interface that this documentation is describing.
+
+
+    Note that the structure of this API is a JSON / RPC style interface as
+    opposed to a RESTful style API. This means all requests sent to the backend
+    must be POST requests rather than adhering to the HTTP verb semantics.
+
+
+    # Authentication
+
+
+    Currently the server does not require any authentication so any caller can
+    create, delete or view the lists of registered community entitlement
+    policies. To delete a policy however the caller will need to have its unique
+    identifier and the secret token returned to the caller when they registered
+    the policy.
+
+
+    # Cross-Origin Resource Sharing (CORS)
+
+
+    This API features Cross-Origin Resource Sharing (CORS) implemented in
+    compliance with W3C spec. And that allows cross-domain communication from
+    the browser. All responses have a wildcard same-origin which makes them
+    completely public and accessible to everyone, including any code on any
+    site.
+externalDocs:
+  description: Documentation repository
+  url: 'https://github.com/DECODEproject/iot-policystore-docs'
+tags:
+  - name: Create Policy
+    description: Endpoint that allows callers to create new community entitlement policies.
+  - name: Delete Policy
+    description: >-
+      Endpoint that allows callers to delete previously created community
+      entitlement policies.
+  - name: List Policies
+    description: >-
+      Endpoint that allows callers to obtain lists of registered community
+      entitlement policies.
+servers:
+  - url: >-
+      https://policystore.decode.smartcitizen.me/twirp/decode.iot.policystore.PolicyStore/
+    description: Instance of the policy store deployed and operated by SmartCitizen

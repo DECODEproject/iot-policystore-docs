@@ -1,0 +1,10 @@
+description: Request object that must be sent to delete a community entitlement policy
+type: object
+properties:
+  community_id:
+    $ref: '#/components/schemas/CommunityId'
+  token:
+    $ref: '#/components/schemas/Token'
+required:
+  - community_id
+  - token

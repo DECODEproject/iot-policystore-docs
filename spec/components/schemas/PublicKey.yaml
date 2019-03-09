@@ -1,0 +1,5 @@
+description: >-
+  The public key part of a key pair associated with the community. Used for
+  encryption of data as it is retrieved.
+type: string
+example: foo
