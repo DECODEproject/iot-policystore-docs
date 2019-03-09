@@ -19,6 +19,28 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateEntitlementPolicyResponse'
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: bad_request
+            msg: authorizable_attribute_id is required
+            meta:
+              argument: authorizable_attribute_id
+    5XX:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: internal
+            msg: database is unavailable
+            meta:
+              cause: '*pg.Error: unable to connect to the database'
   requestBody:
     content:
       application/json:

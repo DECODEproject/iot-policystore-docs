@@ -15,6 +15,17 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/ListEntitlementPoliciesResponse'
+    5XX:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: internal
+            msg: database is unavailable
+            meta:
+              cause: '*pg.Error: unable to connect to the database'
   requestBody:
     content:
       application/json:
