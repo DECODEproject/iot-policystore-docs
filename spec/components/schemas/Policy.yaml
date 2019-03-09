@@ -1,0 +1,20 @@
+description: >-
+  The definition of a community entitlement policy for presentation to an end
+  user.
+type: object
+properties:
+  community_id:
+    $ref: '#/components/schemas/CommunityId'
+  label:
+    $ref: '#/components/schemas/Label'
+  operations:
+    description: An array of operations defined for the policy
+    type: array
+    items:
+      $ref: '#/components/schemas/Operation'
+  public_key:
+    $ref: '#/components/schemas/PublicKey'
+  authorizable_attribute_id:
+    $ref: '#/components/schemas/AuthorizableAttributeId'
+  credential_issuer_endpoint_url:
+    $ref: '#/components/schemas/CredentialIssuerEndpointUrl'

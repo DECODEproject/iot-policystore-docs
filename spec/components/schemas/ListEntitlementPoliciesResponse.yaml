@@ -1,0 +1,10 @@
+description: >-
+  Response object containing a list of community policies that are available for
+  users to apply to their devices
+type: object
+properties:
+  policies:
+    description: A list of community policies
+    type: array
+    items:
+      $ref: '#/components/schemas/Policy'

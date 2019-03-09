@@ -1,0 +1,18 @@
+post:
+  tags:
+    - List Policies
+  summary: List available community policies
+  description: |
+    Listing policies
+  responses:
+    '200':
+      description: Successful list response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ListEntitlementPoliciesResponse'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/ListEntitlementPoliciesRequest'
