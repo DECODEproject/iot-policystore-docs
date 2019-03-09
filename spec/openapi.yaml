@@ -28,7 +28,7 @@ info:
     groups without revealing any data about themselves.
 
 
-    # Server Technology
+    # Server Framework
 
 
     The server implementation was created using a tool called
@@ -38,16 +38,46 @@ info:
     clients that use protocol buffers to transmit and receive data, but in
     addition the library automatically generates a vanilla JSON/HTTP interface.
     It is this interface that this documentation is describing.
+
+
+    Note that the structure of this API is a JSON / RPC style interface as
+    opposed to a RESTful style API. This means all requests sent to the backend
+    must be POST requests rather than adhering to the HTTP verb semantics.
+
+
+    # Authentication
+
+
+    Currently the server does not require any authentication so any caller can
+    create, delete or view the lists of registered community entitlement
+    policies. To delete a policy however the caller will need to have its unique
+    identifier and the secret token returned to the caller when they registered
+    the policy.
+
+
+    # Cross-Origin Resource Sharing (CORS)
+
+
+    This API features Cross-Origin Resource Sharing (CORS) implemented in
+    compliance with W3C spec. And that allows cross-domain communication from
+    the browser. All responses have a wildcard same-origin which makes them
+    completely public and accessible to everyone, including any code on any
+    site.
 externalDocs:
   description: Documentation repository
   url: 'https://github.com/DECODEproject/iot-policystore-docs'
 tags:
   - name: Create Policy
-    description: Creating policies
+    description: Endpoint that allows callers to create new community entitlement policies.
   - name: Delete Policy
-    description: Deleting policies
+    description: >-
+      Endpoint that allows callers to delete previously created community
+      entitlement policies.
   - name: List Policies
-    description: Listing policies
+    description: >-
+      Endpoint that allows callers to obtain lists of registered community
+      entitlement policies.
 servers:
   - url: >-
       https://policystore.decode.smartcitizen.me/twirp/decode.iot.policystore.PolicyStore/
+    description: Instance of the policy store deployed and operated by SmartCitizen

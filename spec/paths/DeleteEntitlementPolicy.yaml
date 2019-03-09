@@ -2,10 +2,11 @@ post:
   tags:
     - Delete Policy
   summary: Delete a community policy
-  description: |
-    This description is on the whole last thing behind the.
-
-    Another paragraph
+  description: >
+    This endpoint allows a caller to delete a previously created community
+    entitlement policy. To be permitted to delete the policy the caller must be
+    in possesion of the community_id and token returned when creating the
+    policy.
   responses:
     '200':
       description: Successful community policy deletion

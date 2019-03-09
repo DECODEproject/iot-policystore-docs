@@ -2,8 +2,12 @@ post:
   tags:
     - List Policies
   summary: List available community policies
-  description: |
-    Listing policies
+  description: >
+    This endpoint allows the caller to obtain a list of all registed community
+    policies that are available for end users to apply to their devices. The
+    endpoint returns a list of all policies with no pagination or searching as
+    for the purposes of the pilot we do not expect to have a significant number
+    of registered policies.
   responses:
     '200':
       description: Successful list response
