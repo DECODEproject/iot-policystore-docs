@@ -7,6 +7,8 @@ properties:
     $ref: '#/components/schemas/CommunityId'
   label:
     $ref: '#/components/schemas/Label'
+  descriptions:
+    $ref: '#/components/schemas/Descriptions'
   operations:
     description: An array of operations defined for the policy
     type: array

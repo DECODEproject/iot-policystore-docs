@@ -3,6 +3,8 @@ type: object
 properties:
   label:
     $ref: '#/components/schemas/Label'
+  descriptions:
+    $ref: '#/components/schemas/Descriptions'
   operations:
     description: An array of operations we define for the policy
     type: array

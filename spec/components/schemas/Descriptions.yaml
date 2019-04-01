@@ -1,0 +1,6 @@
+description: Object containing a descriptions of the community in various languages
+type: object
+example:
+  ca: Descripció de la comunitat
+  en: Description of the community
+  es: Descripción de la comunidad
