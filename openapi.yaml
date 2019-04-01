@@ -192,6 +192,8 @@ components:
       properties:
         label:
           $ref: '#/components/schemas/Label'
+        descriptions:
+          $ref: '#/components/schemas/Descriptions'
         operations:
           description: An array of operations we define for the policy
           type: array
@@ -231,6 +233,13 @@ components:
     DeleteEntitlementPolicyResponse:
       description: Empty response on success
       type: object
+    Descriptions:
+      description: Object containing a descriptions of the community in various languages
+      type: object
+      example:
+        ca: Descripció de la comunitat
+        en: Description of the community
+        es: Descripción de la comunidad
     Error:
       description: Error message returned by the API
       type: object
@@ -297,6 +306,8 @@ components:
           $ref: '#/components/schemas/CommunityId'
         label:
           $ref: '#/components/schemas/Label'
+        descriptions:
+          $ref: '#/components/schemas/Descriptions'
         operations:
           description: An array of operations defined for the policy
           type: array
