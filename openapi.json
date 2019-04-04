@@ -441,7 +441,7 @@
         "example": "foo"
       },
       "SensorId": {
-        "description": "Numerical ID of a sensor as defined by SmartCitizen",
+        "description": "Numerical ID of a sensor as defined by SmartCitizen. The meaning of each ID value can be found by retrieving the list of sensor types from the all sensors endpoint: https://api.smartcitizen.me/v0/sensors\n",
         "type": "integer",
         "example": 55
       },
