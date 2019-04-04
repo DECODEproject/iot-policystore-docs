@@ -79,5 +79,5 @@ tags:
       entitlement policies.
 servers:
   - url: >-
-      https://policystore.decode.smartcitizen.me/twirp/decode.iot.policystore.PolicyStore/
+      https://policystore.decodeproject.eu/twirp/decode.iot.policystore.PolicyStore/
     description: Instance of the policy store deployed and operated by SmartCitizen
