@@ -42,7 +42,7 @@ tags:
   - name: List Policies
     description: Endpoint that allows callers to obtain lists of registered community entitlement policies.
 servers:
-  - url: 'https://policystore.decode.smartcitizen.me/twirp/decode.iot.policystore.PolicyStore/'
+  - url: 'https://policystore.decodeproject.eu/twirp/decode.iot.policystore.PolicyStore/'
     description: Instance of the policy store deployed and operated by SmartCitizen
 paths:
   /CreateEntitlementPolicy:
